@@ -25,13 +25,13 @@ export default {
   getters: {},
   actions: {
     async getSubscribersCount({ commit }) {
-      const response = await axios.get('/api/v1/get-subscribers-count/');
+      const response = await axios.get('/api/v1/bot/get-subscribers-count/');
       const { data } = response;
       commit('setActiveSubscribers', data.active);
       commit('setAllSubscribers', data.all);
     },
     async getUsageChartData({ commit }) {
-      const response = await axios.get('/api/v1/get-data-for-usage-graphic/');
+      const response = await axios.get('/api/v1/bot/get-data-for-usage-graphic/');
       const { data } = response;
       commit('setUsageChartValues', data.map((elem) => elem.message_count));
       commit('setUsageChartLabels', data.map((elem) => elem.date));

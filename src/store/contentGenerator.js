@@ -42,7 +42,7 @@ export default {
   },
   actions: {
     async getUnusedAyats({ commit }) {
-      await axios.get('/api/v1/get-not-used-ayats/')
+      await axios.get('/api/v1/content/get-not-used-ayats/')
         .then((response) => {
           commit('setUnusedAyats', response.data.results);
           const checkedAyats = [];
@@ -53,14 +53,14 @@ export default {
         });
     },
     async getContents({ commit }) {
-      await axios.get('/api/v1/morning-contents/?page_size=5')
+      await axios.get('/api/v1/content/morning-contents/?page_size=5')
         .then((response) => {
           commit('setExistsContent', response.data.results);
           commit('setNextDay', response.data.results[0].day + 1);
         });
     },
     async postContent({ state, commit, dispatch }) {
-      await axios.post('/api/v1/morning-contents/', {
+      await axios.post('/api/v1/content/morning-contents/', {
         day: state.nextDay,
         ayats_ids: state.checkedAyats,
       })

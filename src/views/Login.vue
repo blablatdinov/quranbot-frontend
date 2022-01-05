@@ -26,7 +26,7 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      username: 'blablatdinov123',
+      username: 'blablatdinov',
       password: 'ehodof21',
     };
   },

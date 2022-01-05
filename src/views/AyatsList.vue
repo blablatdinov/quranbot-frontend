@@ -18,7 +18,13 @@
       <td>{{ ayat.content_day }}</td>
     </tr>
   </table>
-  <paginator :page="page"></paginator>
+  <paginator
+    :page="page"
+    :to="'ayats'"
+    :pageCount="$store.state.ayats.pageCount"
+    v-on:setPage="setPage"
+    v-on:getElements="getElements"
+  ></paginator>
 </template>
 
 <script>
@@ -35,6 +41,12 @@ export default {
     Paginator,
   },
   methods: {
+    setPage(pageNum) {
+      this.$store.commit('ayats/SET_PAGE', pageNum);
+    },
+    getElements() {
+      this.$store.dispatch('ayats/getAyats');
+    },
     ...mapActions({
       getAyats: 'ayats/getAyats',
     }),

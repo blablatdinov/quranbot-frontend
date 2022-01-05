@@ -2,7 +2,7 @@
   <router-link
     tag="a"
     class="paginator-link"
-    :to="`ayats?page=${prevPage}`"
+    :to="`${to}?page=${prevPage}`"
     @click="getPage(page - 1)"
     v-if="page > 1"
   >&lt;</router-link>
@@ -10,15 +10,15 @@
     tag="a"
     class="paginator-link"
     v-for="p in pages"
-    :to="`ayats?page=${p.num}`"
+    :to="`${to}?page=${p.num}`"
     :key="p.num"
     @click="getPage(p.num)"
   >{{p.num}}</router-link>
   <router-link
     tag="a"
     class="paginator-link"
-    :to="`ayats?page=${prevPage}`"
-    v-if="page < $store.state.ayats.pageCount"
+    :to="`${to}?page=${prevPage}`"
+    v-if="page < pageCount"
     @click="getPage(page + 1)"
   >&gt;</router-link>
   <a class="paginator-link">&gt;</a>
@@ -33,8 +33,10 @@ export default {
   },
   methods: {
     getPage(pageNum) {
-      this.$store.commit('ayats/SET_PAGE', pageNum);
-      this.$store.dispatch('ayats/getAyats');
+      this.$emit('setPage', pageNum);
+      this.$emit('getElements');
+      // this.$store.commit('ayats/SET_PAGE', pageNum);
+      // this.$store.dispatch('ayats/getAyats');
     },
   },
   computed: {
@@ -52,7 +54,7 @@ export default {
       return 1;
     },
   },
-  props: ['page'],
+  props: ['page', 'to', 'pageCount'],
 };
 </script>
 

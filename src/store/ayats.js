@@ -1,11 +1,11 @@
 import axios from '@/api/backend';
-import getPageNumFromQuery from '@/utils/getPageNum';
+import { getPageNumFromQuery } from '@/utils/getPageNum';
 
 export default {
   namespaced: true,
   state: () => ({
     ayats: [],
-    page: null,
+    pageNum: 1,
     pageSize: 50,
   }),
   mutations: {
@@ -13,18 +13,20 @@ export default {
       state.ayats = ayats;
     },
     SET_PAGE(state, pageNum) {
-      state.page = pageNum;
+      state.pageNum = pageNum;
     },
   },
   actions: {
     async getAyats({ commit, getters }) {
-      const response = await axios.get(`/api/v1/ayats/?page=${getters.pageNum}`);
-      const ayats = await response.data;
-      commit('SET_AYATS', ayats.results);
+      await axios.get(`/api/v1/content/ayats/?page=${getters.pageNum}`)
+        .then((response) => {
+          commit('SET_AYATS', response.data.results);
+        })
+        .catch(() => {});
     },
   },
   getters: {
     pageCount: (state) => state.ayats.length / state.pageSize,
-    pageNum: (state) => state.page || getPageNumFromQuery() || 1,
+    pageNum: (state) => getPageNumFromQuery() || state.pageNum,
   },
 };
