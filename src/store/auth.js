@@ -19,7 +19,8 @@ export default {
         .then((response) => {
           localStorage.setItem('refreshToken', response.data.refresh);
           localStorage.setItem('token', response.data.access);
-          router.push('/');
+          const path = new URL(window.location).search.slice(1).replaceAll('next=', '');
+          router.push(path);
         })
         .catch(() => {});
     },
@@ -38,13 +39,21 @@ export default {
   },
   getters: {
     isAccessTokenValid: () => {
-      const { exp } = jwtDecode(localStorage.getItem('token'));
+      const token = localStorage.getItem('token');
+      if (token === null) {
+        return false;
+      }
+      const { exp } = jwtDecode(token);
       const nowDate = new Date().valueOf();
       const expirationDate = new Date(exp * 1000);
       return nowDate < expirationDate;
     },
     isRefreshTokenValid: () => {
-      const { exp } = jwtDecode(localStorage.getItem('refreshToken'));
+      const token = localStorage.getItem('refreshToken');
+      if (token === null) {
+        return false;
+      }
+      const { exp } = jwtDecode(token);
       const nowDate = new Date().valueOf();
       const expirationDate = new Date(exp * 1000);
       return nowDate < expirationDate;

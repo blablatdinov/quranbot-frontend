@@ -7,6 +7,18 @@ const getQueryParams = () => {
   return queryParamsObject;
 };
 
+const setQueryPage = (pageNum) => {
+  const queryParamsObject = {};
+  new URL(window.location).search.slice(1).split('&').forEach((elem) => {
+    const [key, value] = elem.split('=');
+    if (elem === 'page') {
+      queryParamsObject[key] = pageNum;
+    } else {
+      queryParamsObject[key] = value;
+    }
+  });
+};
+
 const addQueryParam = (param, value) => {
   const queryParams = getQueryParams();
   queryParams[param] = value;
@@ -15,7 +27,12 @@ const addQueryParam = (param, value) => {
 
 const getPageNumFromQuery = () => {
   const queryParams = getQueryParams();
-  return queryParams.page;
+  return queryParams.page || 1;
 };
 
-export { addQueryParam, getPageNumFromQuery };
+export {
+  addQueryParam,
+  getPageNumFromQuery,
+  getQueryParams,
+  setQueryPage,
+};

@@ -26,7 +26,7 @@ const routes = [
     component: () => import('@/views/ContentGenerator.vue'),
   },
   {
-    path: '/login',
+    path: '/login/',
     name: 'Login',
     meta: { layout: 'empty' },
     component: () => import('@/views/Login.vue'),

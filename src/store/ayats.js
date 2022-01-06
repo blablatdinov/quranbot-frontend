@@ -5,7 +5,7 @@ export default {
   namespaced: true,
   state: () => ({
     ayats: [],
-    pageNum: 1,
+    // pageNum: 1,
     pageSize: 50,
   }),
   mutations: {
@@ -27,6 +27,6 @@ export default {
   },
   getters: {
     pageCount: (state) => state.ayats.length / state.pageSize,
-    pageNum: (state) => getPageNumFromQuery() || state.pageNum,
+    pageNum: () => getPageNumFromQuery() || 1,
   },
 };

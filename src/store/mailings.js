@@ -6,6 +6,8 @@ export default {
   state: () => ({
     mailings: [],
     pageNum: 1,
+    pageSize: 50,
+    count: 0,
   }),
   mutations: {
     SET_MAILINGS(state, mailings) {
@@ -14,12 +16,16 @@ export default {
     SET_PAGE(state, pageNum) {
       state.pageNum = pageNum;
     },
+    SET_ELEMENTS_COUNT(state, elementsCount) {
+      state.count = elementsCount;
+    },
   },
   actions: {
-    getMailings({ commit, getters }) {
-      axios.get(`/api/v1/bot/mailings/?page=${getters.pageNum}`)
+    getMailings({ commit, getters }, pageNum) {
+      axios.get(`/api/v1/bot/mailings/?page=${pageNum || getters.pageNum}`)
         .then((response) => {
           commit('SET_MAILINGS', response.data.results);
+          commit('SET_ELEMENTS_COUNT', response.data.count);
         });
     },
     sendToAdmin(_, text) {
@@ -38,7 +44,7 @@ export default {
       state.mailings.forEach((elem) => {
         const newElem = elem;
         if (elem.id === mailingId) {
-          newElem.is_deleted = true;
+          newElem.is_cleaned = true;
         }
         reformattedMailings.push(newElem);
       });
@@ -46,7 +52,13 @@ export default {
     },
   },
   getters: {
-    pageCount: (state) => state.mailings.length / state.pageSize,
-    pageNum: (state) => getPageNumFromQuery() || state.pageNum,
+    pageCount: (state) => {
+      const result = state.count / state.pageSize;
+      return Math.ceil(result);
+    },
+    pageNum: (state) => {
+      const pageNum = getPageNumFromQuery() || state.pageNum;
+      return Number(pageNum);
+    },
   },
 };

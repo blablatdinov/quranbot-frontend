@@ -10,7 +10,7 @@
     >
       <td>{{ mailing.id }}</td>
       <td>{{ mailing.recipients_count }}</td>
-      <td v-if="!mailing.is_deleted">
+      <td v-if="!mailing.is_cleaned">
         <button @click="deleteMailing(mailing.id)">
           Удалить
         </button>
@@ -23,33 +23,37 @@
   <paginator
     :page="page"
     :to="'mailings'"
-    :pageCount="$store.state.mailings.pageCount"
+    :pageCount="pageCont"
     v-on:setPage="setPage"
     v-on:getElements="getElements"
   ></paginator>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Paginator from '@/components/Paginator.vue';
 
 export default {
   data() {
-    return {
-      page: 1,
-    };
+    return {};
   },
   emits: ['setPage', 'getElements'],
   methods: {
     setPage(pageNum) {
       this.$store.commit('mailings/SET_PAGE', pageNum);
     },
-    getElements() {
-      this.$store.dispatch('mailings/getMailings');
+    getElements(pageNum) {
+      this.$store.dispatch('mailings/getMailings', pageNum);
     },
     ...mapActions({
       getMailings: 'mailings/getMailings',
       deleteMailing: 'mailings/deleteMailing',
+    }),
+  },
+  computed: {
+    ...mapGetters({
+      page: 'mailings/pageNum',
+      pageCont: 'mailings/pageCount',
     }),
   },
   components: {
